@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -181,15 +185,4 @@
 
 html {
   font-size: var(--font-size);
-}
-
-/* For empty contentEditable divs */
-[contenteditable][data-placeholder]:empty:before {
-  content: attr(data-placeholder);
-  color: rgba(0, 0, 0, 0.41);
-  cursor: text;
-}
-
-[contenteditable]:empty:focus:before {
-  content: "";
 }

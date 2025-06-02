@@ -1,53 +1,35 @@
-import { FormBuilder } from './components/FormBuilder';
-import { NavHeader } from './components/NavHeader';
-import { useEffect } from 'react';
+import React from 'react';
+import { SurveyBuilder } from './components/SurveyBuilder';
+import { Toaster } from 'sonner';
+import { MazeTracker } from './components/MazeTracker';
 
 export default function App() {
-  // Load Maze Universal Snippet
-  useEffect(() => {
-    const apiKey = '69e0b013-3760-41d3-b9fa-da2d6ea757c4';
-    
-    // Get or set session timestamp
-    let timestamp;
-    try {
-      timestamp = window.sessionStorage.getItem('maze-us');
-    } catch (err) {
-      // Handle storage access error
-    }
-
-    if (!timestamp) {
-      timestamp = new Date().getTime().toString();
-      try {
-        window.sessionStorage.setItem('maze-us', timestamp);
-      } catch (err) {
-        // Handle storage access error
-      }
-    }
-
-    // Create and append script element
-    const script = document.createElement('script');
-    script.src = `https://snippet.maze.co/maze-universal-loader.js?apiKey=${apiKey}`;
-    script.async = true;
-    document.head.appendChild(script);
-    
-    // Set global API key
-    window.mazeUniversalSnippetApiKey = apiKey;
-
-    // Clean up function
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-  }, []);
-
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Navigation header with logo, user info, and navigation tabs */}
-      <NavHeader activeTab="fields" />
+    <div className="size-full flex flex-col">
+      {/* Add Maze tracking if needed */}
+      <MazeTracker apiKey="69e0b013-3760-41d3-b9fa-da2d6ea757c4" />
       
-      {/* Main form builder content */}
-      <FormBuilder />
+      <header className="p-4 border-b">        
+        <div className="max-w-screen-xl mx-auto flex justify-between items-center">
+          <h1 className="font-bold">Survey Builder for Teachers</h1>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-muted-foreground">May 29, 2025</span>
+            <div className="size-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+              <span>TU</span>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <main className="flex-1 overflow-hidden">
+        <SurveyBuilder />
+      </main>
+      
+      <footer className="border-t p-3 text-center text-sm text-muted-foreground">
+        <p>© 2025 Education Survey Platform | Privacy Policy | Terms of Service</p>
+      </footer>
+      
+      <Toaster position="top-right" richColors closeButton />
     </div>
   );
 }
