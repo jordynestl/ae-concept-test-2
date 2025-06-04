@@ -11,7 +11,7 @@ interface SurveyPreviewProps {
 
 export function SurveyPreview({ title, description, questions, isPublished }: SurveyPreviewProps) {
   return (
-    <div className="bg-white border rounded-lg p-6 max-w-full">
+    <div className="bg-white border rounded-lg p-6 w-full">
       <div className="mb-8">
         <h2 className="text-xl font-medium mb-2">{title}</h2>
         {description && (

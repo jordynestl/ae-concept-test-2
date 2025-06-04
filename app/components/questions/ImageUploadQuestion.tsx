@@ -148,7 +148,7 @@ export function ImageUploadQuestion({
           
           <div className="pl-8 mt-4">
             <div className="border border-dashed border-black rounded-sm p-6 flex flex-col items-center justify-center gap-2">
-              <Image size={40} className="text-gray-500" aria-hidden="true" />
+              <Image size={40} className="text-gray-500" />
               <p>Drop image{question.allowMultiple ? 's' : ''} here or click to upload</p>
               <p className="text-sm text-gray-500">Maximum file size: {question.maxSize || 5}MB</p>
             </div>

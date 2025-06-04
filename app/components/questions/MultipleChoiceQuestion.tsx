@@ -179,7 +179,7 @@ export function MultipleChoiceQuestion({
                 onClick={handleAddOtherOption}
                 className="bg-gray-200 hover:bg-gray-300 text-black rounded-sm"
               >
-                Add &apos;Others&apos; option
+                Add 'Others' option
               </Button>
             )}
           </div>

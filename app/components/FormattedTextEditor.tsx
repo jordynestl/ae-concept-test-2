@@ -1,5 +1,4 @@
-
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, KeyboardEvent } from 'react';
 import { TextFormatToolbar } from './TextFormatToolbar';
 
 interface FormattedTextEditorProps {
@@ -34,8 +33,13 @@ export function FormattedTextEditor({
       if (editorRef.current.innerHTML !== value) {
         editorRef.current.innerHTML = value || '';
       }
+      
+      // Apply placeholder styles and behavior
+      if (editorRef.current.innerHTML === '') {
+        editorRef.current.dataset.placeholder = placeholder;
+      }
     }
-  }, [value]);
+  }, [value, placeholder]);
 
   // Save content when editor changes
   const handleInput = () => {
@@ -94,11 +98,20 @@ export function FormattedTextEditor({
         contentEditable
         onInput={handleInput}
         onKeyUp={updateActiveFormats}
+        onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+          // Allow spacebar to work correctly
+          if (e.key === ' ' || e.code === 'Space') {
+            // We don't need to prevent default for contentEditable as it handles spaces naturally
+            // Just make sure no other handlers are blocking it
+            updateActiveFormats();
+          }
+        }}
         onMouseUp={updateActiveFormats}
         onFocus={updateActiveFormats}
         data-placeholder={placeholder}
-        className="p-3 border border-black rounded-sm min-h-[50px] focus:outline-none empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+        className="p-3 border border-black rounded-sm min-h-[50px] focus:outline-none empty:before:content-[attr(data-placeholder)] empty:before:text-muted-foreground empty:before:pointer-events-none"
         role="textbox"
+        spellCheck="true"
       />
     </div>
   );

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from './ui/sheet';
@@ -186,7 +185,7 @@ export const SurveyBuilder = () => {
             </TabsList>
           </div>
           
-          <div className="flex-1 overflow-auto p-6">
+          <div className="flex-1 overflow-y-auto p-6">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-2">
                 <span className={`py-1 px-2 rounded-sm text-sm ${survey.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-300 text-black'}`}>
@@ -247,21 +246,21 @@ export const SurveyBuilder = () => {
             <TabsContent value="add-fields" className="mt-0">
               <div className={`grid gap-6 ${showPreview ? 'grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]' : 'grid-cols-1'}`}>
                 {/* Left Column - Question Editor */}
-                <div className="flex flex-col h-full gap-4">
+                <div className="flex flex-col gap-4 max-h-[calc(100vh-220px)]">
                   <div className="flex items-center justify-between">
                     <h3 className="font-medium">Questions</h3>
                     
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button size="sm" variant="outline" className="h-8">
-                          <Plus className="h-4 w-4 mr-1" /> Add Question
+                          <Plus className="h-4 w-4 mr-1" /> Add Field
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-md">
                         <DialogHeader>
-                          <DialogTitle>Add Question</DialogTitle>
+                          <DialogTitle>Add Field</DialogTitle>
                           <DialogDescription>
-                            Select a question type to add to your survey.
+                            Select a field type to add to your survey.
                           </DialogDescription>
                         </DialogHeader>
                         <div className="grid grid-cols-2 gap-4 py-4">
@@ -270,7 +269,7 @@ export const SurveyBuilder = () => {
                             className="flex flex-col gap-2 h-auto p-4"
                             onClick={() => {
                               handleAddQuestion('multiple-choice');
-                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLButtonElement)?.click();
+                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLElement)?.click();
                             }}
                           >
                             <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center">
@@ -283,7 +282,7 @@ export const SurveyBuilder = () => {
                             className="flex flex-col gap-2 h-auto p-4"
                             onClick={() => {
                               handleAddQuestion('multiple-response');
-                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLButtonElement)?.click();
+                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLElement)?.click();
                             }}
                           >
                             <div className="w-8 h-8 rounded border-2 border-primary flex items-center justify-center">
@@ -296,7 +295,7 @@ export const SurveyBuilder = () => {
                             className="flex flex-col gap-2 h-auto p-4"
                             onClick={() => {
                               handleAddQuestion('ranking');
-                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLButtonElement)?.click();
+                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLElement)?.click();
                             }}
                           >
                             <div className="flex flex-col items-center">
@@ -320,7 +319,7 @@ export const SurveyBuilder = () => {
                             className="flex flex-col gap-2 h-auto p-4"
                             onClick={() => {
                               handleAddQuestion('dropdown');
-                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLButtonElement)?.click();
+                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLElement)?.click();
                             }}
                           >
                             <div className="w-8 h-8 border-2 border-primary flex items-center justify-center">
@@ -333,7 +332,7 @@ export const SurveyBuilder = () => {
                             className="flex flex-col gap-2 h-auto p-4"
                             onClick={() => {
                               handleAddQuestion('image-upload');
-                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLButtonElement)?.click();
+                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLElement)?.click();
                             }}
                           >
                             <div className="w-8 h-8 border-2 border-dashed border-primary flex items-center justify-center">
@@ -346,7 +345,7 @@ export const SurveyBuilder = () => {
                             className="flex flex-col gap-2 h-auto p-4"
                             onClick={() => {
                               handleAddQuestion('section');
-                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLButtonElement)?.click();
+                              (document.querySelector('[role="dialog"]')?.closest('div')?.querySelector('button[data-state="closed"]') as HTMLElement)?.click();
                             }}
                           >
                             <div className="w-16 h-0.5 bg-primary"></div>
@@ -364,7 +363,7 @@ export const SurveyBuilder = () => {
                   >
                     <div 
                       ref={setQuestionContainerRef} 
-                      className="bg-[#f8f8f8] border rounded-lg p-4 min-h-[300px] flex-grow overflow-y-auto"
+                      className="bg-[#f8f8f8] border rounded-lg p-4 min-h-[300px] flex-grow overflow-y-auto max-h-[calc(100vh-400px)]"
                     >
                       {survey.questions.length > 0 ? (
                         <div className="space-y-1">
@@ -392,7 +391,7 @@ export const SurveyBuilder = () => {
                             <path d="M12 1.5V4.5M12 19.5V22.5M4.5 12H1.5M22.5 12H19.5M18.879 5.121L16.757 7.243M7.243 16.757L5.121 18.879M18.879 18.879L16.757 16.757M7.243 7.243L5.121 5.121M21 12C21 16.971 16.971 21 12 21C7.029 21 3 16.971 3 12C3 7.029 7.029 3 12 3C16.971 3 21 7.029 21 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                           <h3 className="text-lg">Your survey is empty</h3>
-                          <p className="text-muted-foreground">Click the Add Question button to get started</p>
+                          <p className="text-muted-foreground">Click the Add Field button to get started</p>
                         </div>
                       )}
                       
@@ -402,44 +401,7 @@ export const SurveyBuilder = () => {
                     </div>
                   </DragDropContainer>
 
-                  {/* Question Settings */}
-                  {selectedQuestion && (
-                    <div className="border rounded-lg p-4">
-                      <h3 className="font-bold mb-2">Question Settings</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <h4 className="text-sm mb-1">Question Type</h4>
-                          <div className="p-2 bg-muted rounded text-sm">{selectedQuestion.type}</div>
-                        </div>
-                        
-                        <div>
-                          <div className="flex items-center mb-1">
-                            <input 
-                              type="checkbox" 
-                              id="required"
-                              checked={selectedQuestion.required}
-                              onChange={(e) => {
-                                handleQuestionChange({
-                                  ...selectedQuestion,
-                                  required: e.target.checked
-                                });
-                              }}
-                              className="mr-2"
-                            />
-                            <label htmlFor="required" className="text-sm">Required question</label>
-                          </div>
-                        </div>
-                        
-                        <Button 
-                          variant="outline"
-                          onClick={() => setPersonalizationOpen(true)}
-                          className="w-full"
-                        >
-                          Personalization Options
-                        </Button>
-                      </div>
-                    </div>
-                  )}
+
 
                   {survey.questions.length > 0 && (
                     <div className="flex justify-end">
@@ -468,8 +430,8 @@ export const SurveyBuilder = () => {
 
                 {/* Right Column - Preview */}
                 {showPreview && (
-                  <div className="border rounded-lg p-4 relative">
-                    <div className="sticky top-0 bg-card mb-3 pb-2 flex justify-between items-center">
+                  <div className="border rounded-lg p-4 relative flex flex-col max-h-[calc(100vh-220px)]">
+                    <div className="sticky top-0 bg-card flex justify-between items-center pb-3">
                       <h3 className="font-medium">Preview</h3>
                       <Button 
                         variant="ghost" 
@@ -483,7 +445,7 @@ export const SurveyBuilder = () => {
                         </svg>
                       </Button>
                     </div>
-                    <div className="overflow-auto h-[calc(100vh-300px)]">
+                    <div className="flex-1 overflow-y-auto pr-2 pb-4">
                       <SurveyPreview
                         title={surveyTitle}
                         description={surveyDescription}

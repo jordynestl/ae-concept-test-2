@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
@@ -6,7 +5,7 @@ import { Question } from '../types/survey';
 import { QuestionRenderer } from './QuestionRenderer';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
-import { Save } from 'lucide-react';
+import { Save, X } from 'lucide-react';
 
 interface DroppableQuestionProps {
   question: Question;
@@ -64,10 +63,12 @@ export function DroppableQuestion({
   };
 
   const handleSelect = () => {
-    onSelectQuestion(question.id);
-    setIsEditing(true);
-    // Store the current question state when starting to edit
-    setPendingChanges(question);
+    if (!isEditing) {
+      onSelectQuestion(question.id);
+      setIsEditing(true);
+      // Store the current question state when starting to edit
+      setPendingChanges(question);
+    }
   };
 
   const handleChange = (updatedQuestion: Question) => {
@@ -77,35 +78,43 @@ export function DroppableQuestion({
   
   const handleSaveField = () => {
     if (pendingChanges) {
+      // Validate the question before saving
+      if (!pendingChanges.text || pendingChanges.text.trim() === '') {
+        toast.error('Please enter a question text before saving.');
+        return;
+      }
+
       // Propagate changes to parent component
       onQuestionChange(pendingChanges);
-      // Clear pending changes
+      // Clear pending changes and exit editing mode
       setPendingChanges(null);
-      toast.success('Field saved successfully!');
       setIsEditing(false);
+      toast.success('Field saved successfully!');
     }
   };
 
   const handleCancelEdit = () => {
-    // Discard changes
+    // Discard changes and exit editing mode
     setPendingChanges(null);
     setIsEditing(false);
-    toast.info('Editing cancelled');
+    toast.info('Changes discarded');
   };
 
   const isSelected = selectedQuestionId === question.id;
+  const hasChanges = pendingChanges && JSON.stringify(pendingChanges) !== JSON.stringify(question);
 
   return (
     <div 
       ref={combinedRef}
       style={style} 
-      {...attributes} 
-      {...listeners}
+      {...(isEditing ? {} : { ...attributes, ...listeners })}
       onClick={handleSelect}
-      className={`mb-4 p-4 border-2 rounded-md transition-all ${
-        isSelected ? 'border-primary' : 'border-transparent'
+      className={`mb-4 p-4 border-2 rounded-md transition-all cursor-pointer ${
+        isSelected ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-gray-300'
       } ${
-        isOver ? 'bg-accent/30' : 'bg-white'
+        isOver ? 'bg-accent/30' : ''
+      } ${
+        isEditing ? 'ring-2 ring-primary/20' : ''
       }`}
       role="button"
       aria-pressed={isSelected}
@@ -117,6 +126,11 @@ export function DroppableQuestion({
           </svg>
         </div>
         <span className="text-sm">Question {index + 1}</span>
+        {isEditing && hasChanges && (
+          <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+            Unsaved changes
+          </span>
+        )}
       </div>
       
       <QuestionRenderer
@@ -134,13 +148,16 @@ export function DroppableQuestion({
             variant="outline" 
             size="sm" 
             onClick={handleCancelEdit}
+            className="border-gray-300 hover:bg-gray-50"
           >
+            <X className="w-4 h-4 mr-1" />
             Cancel
           </Button>
           <Button 
             size="sm" 
             onClick={handleSaveField} 
-            className="bg-primary text-white hover:bg-primary/90"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            disabled={!hasChanges}
           >
             <Save className="w-4 h-4 mr-1" />
             Save Field
